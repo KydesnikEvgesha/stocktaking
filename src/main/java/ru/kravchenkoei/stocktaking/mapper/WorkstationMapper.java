@@ -4,8 +4,9 @@ import org.mapstruct.Mapper;
 import ru.kravchenkoei.stocktaking.dto.WorkstationDto;
 import ru.kravchenkoei.stocktaking.model.Workstation;
 
-@Mapper(componentModel = "spring")
+@Mapper(uses = {ElementMapper.class})
 public interface WorkstationMapper {
-    WorkstationDto toDto(Workstation workstation);
-    Workstation toDomain(WorkstationDto workstationDto);
+  WorkstationDto toDto(Workstation workstation);
+
+  Workstation toDomain(WorkstationDto workstationDto);
 }

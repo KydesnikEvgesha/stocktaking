@@ -16,38 +16,38 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class WorkstationService {
-    private final WorkstationRepo workstationRepo;
-    private final WorkstationMapper workstationMapper;
+  private final WorkstationRepo workstationRepo;
+  private final WorkstationMapper workstationMapper;
 
-    public WorkstationDto addWorkstation(WorkstationDto workstationDto){
-        return Optional.of(workstationDto)
-                .map(workstationMapper::toDomain)
-                .map(workstationRepo::save)
-                .map(workstationMapper::toDto)
-                .get();
-    }
+  public WorkstationDto addWorkstation(WorkstationDto workstationDto) {
+    return Optional.of(workstationDto)
+        .map(workstationMapper::toDomain)
+        .map(workstationRepo::save)
+        .map(workstationMapper::toDto)
+        .get();
+  }
 
-    public List<WorkstationDto> findAllWorkstations(){
-        ArrayList<Workstation> workstationArrayList = (ArrayList<Workstation>) workstationRepo.findAll();
-        return workstationArrayList.stream()
-                .map(workstationMapper::toDto)
-                .collect(Collectors.toList());
-    }
+  public List<WorkstationDto> findAllWorkstations() {
+    List<Workstation> workstationArrayList = new ArrayList<>();
+    workstationRepo.findAll().forEach(workstationArrayList::add);
+    return workstationArrayList.stream().map(workstationMapper::toDto).collect(Collectors.toList());
+  }
 
-    public WorkstationDto findWorkstationById(Long id){
-        return Optional.of(workstationRepo.findById(id))
-                .orElseThrow( () -> new EntityNotFoundException(
-                        "Рабочая машина с уникальным номером " + id + " не была найдена"
-                ))
-                .map(workstationMapper::toDto)
-                .get();
-    }
+  public WorkstationDto findWorkstationById(Long id) {
+    return Optional.of(workstationRepo.findById(id))
+        .orElseThrow(
+            () ->
+                new EntityNotFoundException(
+                    "Рабочая машина с уникальным номером " + id + " не была найдена"))
+        .map(workstationMapper::toDto)
+        .get();
+  }
 
-    public WorkstationDto updateWorkstation(WorkstationDto workstationDto){
-       return addWorkstation(workstationDto);
-    }
+  public WorkstationDto updateWorkstation(WorkstationDto workstationDto) {
+    return addWorkstation(workstationDto);
+  }
 
-    public void deleteWorkstationById(Long id){
-        workstationRepo.deleteById(id);
-    }
+  public void deleteWorkstationById(Long id) {
+    workstationRepo.deleteById(id);
+  }
 }

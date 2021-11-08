@@ -5,13 +5,14 @@ import lombok.Value;
 import java.util.List;
 
 @Value
-public class WorkstationDto {
+public class ElementDto {
   private Long id;
 
   private String name;
 
-  private EmployeeDto employee;
-  private LocationDto location;
+  private CompanyDto company;
 
-  private List<ElementDto> elementList;
+  private TypeDto type;
+
+  private List<SpecificationDto> specificationList;
 }

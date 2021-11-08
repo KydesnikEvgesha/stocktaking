@@ -4,8 +4,9 @@ import org.mapstruct.Mapper;
 import ru.kravchenkoei.stocktaking.dto.EmployeeDto;
 import ru.kravchenkoei.stocktaking.model.Employee;
 
-@Mapper(componentModel = "spring")
+@Mapper
 public interface EmployeeMapper {
-    EmployeeDto toDto(Employee employee);
-    Employee toDomain(EmployeeDto employeeDto);
+  EmployeeDto toDto(Employee employee);
+
+  Employee toDomain(EmployeeDto employeeDto);
 }

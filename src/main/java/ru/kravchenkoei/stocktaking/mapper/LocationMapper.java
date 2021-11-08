@@ -4,10 +4,9 @@ import org.mapstruct.Mapper;
 import ru.kravchenkoei.stocktaking.dto.LocationDto;
 import ru.kravchenkoei.stocktaking.model.Location;
 
-import java.util.Optional;
-
-@Mapper(componentModel = "spring")
+@Mapper(uses = {WorkstationMapper.class})
 public interface LocationMapper {
-    LocationDto toDto(Location location);
-    Location toDomain(LocationDto locationDto);
+  LocationDto toDto(Location location);
+
+  Location toDomain(LocationDto locationDto);
 }

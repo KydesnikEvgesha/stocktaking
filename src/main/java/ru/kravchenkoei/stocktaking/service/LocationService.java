@@ -17,38 +17,41 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class LocationService {
 
-    private final LocationRepo locationRepo;
-    private final LocationMapper locationMapper;
+  private final LocationRepo locationRepo;
+  private final LocationMapper locationMapper;
 
-    public LocationDto addLocation(LocationDto locationDto) {
-        return Optional.of(locationDto)
-                .map(locationMapper::toDomain)
-                .map(locationRepo::save)
-                .map(locationMapper::toDto)
-                .get();
-    }
+  public LocationDto addLocation(LocationDto locationDto) {
+    return Optional.of(locationDto)
+        .map(locationMapper::toDomain)
+        .map(locationRepo::save)
+        .map(locationMapper::toDto)
+        .get();
+  }
 
-    public List<LocationDto> findAllLocations() {
-        ArrayList<Location> locationArrayList = (ArrayList<Location>) locationRepo.findAll();
-        return locationArrayList.stream()
-                .map(locationMapper::toDto)
-                .collect(Collectors.toList());
-    }
+  public List<LocationDto> findAllLocations() {
+    ArrayList<Location> locationArrayList = (ArrayList<Location>) locationRepo.findAll();
+    return locationArrayList.stream().map(locationMapper::toDto).collect(Collectors.toList());
+  }
 
-    public LocationDto updateLocation(LocationDto locationDto) {
-        return addLocation(locationDto);
-    }
+  public List<LocationDto> findAllByAddressLocationDtos(String address) {
+    return locationRepo.findDistinctByAddressOrderByAddress(address).stream()
+        .map(locationMapper::toDto)
+        .collect(Collectors.toList());
+  }
 
-    public LocationDto findLocationById(Long id) {
-        return Optional.of(locationRepo.findById(id))
-                .orElseThrow( () -> new EntityNotFoundException(
-                        "Офис с уникальным номером " + id + " не был найден"
-                ))
-                .map(locationMapper::toDto)
-                .get();
-    }
+  public LocationDto updateLocation(LocationDto locationDto) {
+    return addLocation(locationDto);
+  }
 
-    public void deleteLocation(Long id) {
-        locationRepo.deleteById(id);
-    }
+  public LocationDto findLocationById(Long id) {
+    return Optional.of(locationRepo.findById(id))
+        .orElseThrow(
+            () -> new EntityNotFoundException("Офис с уникальным номером " + id + " не был найден"))
+        .map(locationMapper::toDto)
+        .get();
+  }
+
+  public void deleteLocation(Long id) {
+    locationRepo.deleteById(id);
+  }
 }

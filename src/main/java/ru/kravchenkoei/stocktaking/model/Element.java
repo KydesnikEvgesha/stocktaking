@@ -8,7 +8,7 @@ import java.util.List;
 
 @Data
 @Entity
-public class Workstation implements Serializable {
+public class Element implements Serializable {
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   @Column(nullable = false, updatable = false)
@@ -16,10 +16,12 @@ public class Workstation implements Serializable {
 
   private String name;
 
-  @OneToOne @MapsId private Employee employee;
+  @OneToOne @MapsId private Company company;
 
-  @OneToOne @MapsId private Location location;
+  @OneToOne @MapsId private Type type;
 
-  @OneToMany(mappedBy = "workstation")
-  private List<Element> elementList;
+  @OneToMany(mappedBy = "element")
+  private List<Specification> specificationList;
+
+  @ManyToOne @PrimaryKeyJoinColumn private Workstation workstation;
 }
