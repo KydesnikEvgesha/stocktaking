@@ -10,7 +10,7 @@ import ru.kravchenkoei.stocktaking.service.EmployeeService;
 import java.util.List;
 
 @RestController
-@RequestMapping("/employee")
+@RequestMapping("/api/employee")
 @CrossOrigin("*")
 @RequiredArgsConstructor
 public class EmployeeController {

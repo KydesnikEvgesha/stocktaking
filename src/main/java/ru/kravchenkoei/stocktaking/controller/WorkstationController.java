@@ -10,7 +10,7 @@ import ru.kravchenkoei.stocktaking.service.WorkstationService;
 import java.util.List;
 
 @RestController
-@RequestMapping("/workstation")
+@RequestMapping("/api/workstation")
 @CrossOrigin("*")
 @RequiredArgsConstructor
 public class WorkstationController {

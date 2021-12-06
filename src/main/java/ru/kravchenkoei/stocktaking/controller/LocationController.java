@@ -10,14 +10,15 @@ import ru.kravchenkoei.stocktaking.service.LocationService;
 import java.util.List;
 
 @RestController
-@RequestMapping("/location")
+@RequestMapping("/api/location")
 @CrossOrigin("*")
 @RequiredArgsConstructor
 public class LocationController {
 
   private final LocationService locationService;
 
-  @GetMapping("/all")
+  //@RequestMapping(value = "/all", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+  @GetMapping(value = "/all")
   public ResponseEntity<List<LocationDto>> getAllLocations() {
     List<LocationDto> locations = locationService.findAllLocations();
     return new ResponseEntity<>(locations, HttpStatus.OK);

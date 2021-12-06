@@ -10,7 +10,7 @@ import ru.kravchenkoei.stocktaking.service.TypeService;
 import java.util.List;
 
 @RestController
-@RequestMapping("/type")
+@RequestMapping("/api/type")
 @CrossOrigin
 @RequiredArgsConstructor
 public class TypeController {

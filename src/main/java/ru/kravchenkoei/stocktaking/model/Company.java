@@ -17,7 +17,7 @@ public class Company implements Serializable {
   private String name;
   private String address;
 
-  @OneToOne(mappedBy = "company", cascade = CascadeType.ALL)
-  @PrimaryKeyJoinColumn
-  private Element element;
+//  @OneToOne(mappedBy = "company", cascade = CascadeType.ALL)
+//  @PrimaryKeyJoinColumn
+//  private Element element;
 }
