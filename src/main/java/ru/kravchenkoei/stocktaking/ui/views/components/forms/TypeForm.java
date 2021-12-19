@@ -13,25 +13,23 @@ import com.vaadin.flow.data.binder.BeanValidationBinder;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.binder.ValidationException;
 import com.vaadin.flow.shared.Registration;
-import ru.kravchenkoei.stocktaking.data.model.Company;
+import ru.kravchenkoei.stocktaking.data.model.Type;
 
-public class CompanyForm extends FormLayout {
-    private Company company;
-    TextField name = new TextField("Название");
-    TextField address = new TextField("Адрес");
+public class TypeForm extends FormLayout {
+    private Type type;
+    TextField name = new TextField("Наименование");
 
     Button save = new Button("Сохранить");
     Button delete = new Button("Удалить");
     Button close = new Button("Отменить");
 
-    Binder<Company> binder = new BeanValidationBinder<>(Company.class);
+    Binder<Type> binder = new BeanValidationBinder<>(Type.class);
 
-    public CompanyForm() {
+    public TypeForm() {
         addClassName("contact-form");
 
         binder.bindInstanceFields(this);
         add(name,
-                address,
                 createButtonsLayout());
     }
 
@@ -44,8 +42,8 @@ public class CompanyForm extends FormLayout {
         close.addClickShortcut(Key.ESCAPE);
 
         save.addClickListener(event -> validateAndSave());
-        delete.addClickListener(event -> fireEvent(new DeleteEvent(this, company)));
-        close.addClickListener(event -> fireEvent(new CloseEvent(this)));
+        delete.addClickListener(event -> fireEvent(new TypeForm.DeleteEvent(this, type)));
+        close.addClickListener(event -> fireEvent(new TypeForm.CloseEvent(this)));
 
         binder.addStatusChangeListener(e -> save.setEnabled(binder.isValid()));
         return new HorizontalLayout(save, delete, close);
@@ -53,46 +51,46 @@ public class CompanyForm extends FormLayout {
 
     private void validateAndSave() {
         try {
-            binder.writeBean(company);
-            fireEvent(new SaveEvent(this, company));
+            binder.writeBean(type);
+            fireEvent(new TypeForm.SaveEvent(this, type));
         } catch (ValidationException e) {
             e.printStackTrace();
         }
     }
 
-    public void setCompany(Company company) {
-        this.company = company;
-        binder.readBean(company);
+    public void setType(Type type) {
+        this.type = type;
+        binder.readBean(type);
     }
 
-    public static abstract class CompanyFormEvent extends ComponentEvent<CompanyForm> {
-        private Company company;
+    public static abstract class TypeFormEvent extends ComponentEvent<TypeForm> {
+        private Type type;
 
-        protected CompanyFormEvent(CompanyForm source, Company company) {
+        protected TypeFormEvent(TypeForm source, Type type) {
             super(source, false);
-            this.company = company;
+            this.type = type;
         }
 
-        public Company getCompany() {
-            return company;
-        }
-    }
-
-    public static class SaveEvent extends CompanyFormEvent {
-        SaveEvent(CompanyForm source, Company company) {
-            super(source, company);
+        public Type getType() {
+            return type;
         }
     }
 
-    public static class DeleteEvent extends CompanyFormEvent {
-        DeleteEvent(CompanyForm source, Company company) {
-            super(source, company);
+    public static class SaveEvent extends TypeForm.TypeFormEvent {
+        SaveEvent(TypeForm source, Type type) {
+            super(source, type);
+        }
+    }
+
+    public static class DeleteEvent extends TypeForm.TypeFormEvent {
+        DeleteEvent(TypeForm source, Type type) {
+            super(source, type);
         }
 
     }
 
-    public static class CloseEvent extends CompanyFormEvent {
-        CloseEvent(CompanyForm source) {
+    public static class CloseEvent extends TypeForm.TypeFormEvent {
+        CloseEvent(TypeForm source) {
             super(source, null);
         }
     }
@@ -102,4 +100,3 @@ public class CompanyForm extends FormLayout {
         return getEventBus().addListener(eventType, listener);
     }
 }
-

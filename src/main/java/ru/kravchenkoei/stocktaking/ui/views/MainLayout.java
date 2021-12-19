@@ -10,6 +10,8 @@ import com.vaadin.flow.router.HighlightConditions;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouterLink;
 import ru.kravchenkoei.stocktaking.ui.views.list.CompanyListView;
+import ru.kravchenkoei.stocktaking.ui.views.list.ElementListView;
+import ru.kravchenkoei.stocktaking.ui.views.list.TypeListView;
 
 @Route("")
 public class MainLayout extends AppLayout {
@@ -38,10 +40,14 @@ public class MainLayout extends AppLayout {
 
     private void createDrawer() {
         RouterLink companyListLink = new RouterLink("Производители", CompanyListView.class);
+        RouterLink elementListLink = new RouterLink("Комплектующие", ElementListView.class);
+        RouterLink typeListLink = new RouterLink("Типы комплектующих", TypeListView.class);
         companyListLink.setHighlightCondition(HighlightConditions.sameLocation());
 
         addToDrawer(new VerticalLayout(
-                companyListLink
+                companyListLink,
+                elementListLink,
+                typeListLink
         ));
     }
 }

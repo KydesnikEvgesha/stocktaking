@@ -9,18 +9,17 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
-import ru.kravchenkoei.stocktaking.model.Company;
-import ru.kravchenkoei.stocktaking.service.CompanyService;
+import ru.kravchenkoei.stocktaking.data.model.Company;
+import ru.kravchenkoei.stocktaking.data.service.CompanyService;
 import ru.kravchenkoei.stocktaking.ui.views.MainLayout;
 import ru.kravchenkoei.stocktaking.ui.views.components.forms.CompanyForm;
 
 
-@PageTitle("Контрагенты")
+@PageTitle("Производители")
 @Route(value = "/company", layout = MainLayout.class)
 public class CompanyListView extends VerticalLayout {
-    public static final String VIEW_NAME = "Контрагенты";
 
-    Grid<Company> companyGrid = new Grid<>(Company.class);
+    Grid<Company> companyGrid = new Grid<>();
     TextField filterText = new TextField();
     CompanyForm companyForm;
     CompanyService companyService;
@@ -92,9 +91,8 @@ public class CompanyListView extends VerticalLayout {
     public void configureGrid(){
         companyGrid.addClassName("contact-grid");
         companyGrid.setSizeFull();
-        companyGrid.setColumns("name", "address");
-        //companyGrid.addColumn(CompanyDto::getName).setHeader("Название");
-        //companyGrid.addColumn(CompanyDto::getAddress).setHeader("Адрес");
+        companyGrid.addColumn(Company::getName).setHeader("Наименованик компании");
+        companyGrid.addColumn(Company::getAddress).setHeader("Адрес компании");
         companyGrid.getColumns().forEach(col -> col.setAutoWidth(true));
 
         companyGrid.asSingleSelect().addValueChangeListener(event ->

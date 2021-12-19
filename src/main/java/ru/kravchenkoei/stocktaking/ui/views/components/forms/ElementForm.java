@@ -6,6 +6,7 @@ import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
+import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.TextField;
@@ -14,24 +15,35 @@ import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.binder.ValidationException;
 import com.vaadin.flow.shared.Registration;
 import ru.kravchenkoei.stocktaking.data.model.Company;
+import ru.kravchenkoei.stocktaking.data.model.Element;
+import ru.kravchenkoei.stocktaking.data.model.Type;
 
-public class CompanyForm extends FormLayout {
-    private Company company;
-    TextField name = new TextField("Название");
-    TextField address = new TextField("Адрес");
+import java.util.List;
+
+public class ElementForm extends FormLayout {
+    private Element element;
+    TextField name = new TextField("Наименование");
+    ComboBox<Company> company = new ComboBox<>("Производитель");
+    ComboBox<Type> type = new ComboBox<>("Тип комплектующего");
 
     Button save = new Button("Сохранить");
     Button delete = new Button("Удалить");
     Button close = new Button("Отменить");
 
-    Binder<Company> binder = new BeanValidationBinder<>(Company.class);
+    Binder<Element> binder = new BeanValidationBinder<>(Element.class);
 
-    public CompanyForm() {
+    public ElementForm(List<Company> companies, List<Type> types) {
         addClassName("contact-form");
+        company.setItemLabelGenerator(Company::getName);
+        company.setItems(companies);
+
+        type.setItemLabelGenerator(Type::getName);
+        type.setItems(types);
 
         binder.bindInstanceFields(this);
         add(name,
-                address,
+                company,
+                type,
                 createButtonsLayout());
     }
 
@@ -44,8 +56,8 @@ public class CompanyForm extends FormLayout {
         close.addClickShortcut(Key.ESCAPE);
 
         save.addClickListener(event -> validateAndSave());
-        delete.addClickListener(event -> fireEvent(new DeleteEvent(this, company)));
-        close.addClickListener(event -> fireEvent(new CloseEvent(this)));
+        delete.addClickListener(event -> fireEvent(new ElementForm.DeleteEvent(this, element)));
+        close.addClickListener(event -> fireEvent(new ElementForm.CloseEvent(this)));
 
         binder.addStatusChangeListener(e -> save.setEnabled(binder.isValid()));
         return new HorizontalLayout(save, delete, close);
@@ -53,46 +65,46 @@ public class CompanyForm extends FormLayout {
 
     private void validateAndSave() {
         try {
-            binder.writeBean(company);
-            fireEvent(new SaveEvent(this, company));
+            binder.writeBean(element);
+            fireEvent(new ElementForm.SaveEvent(this, element));
         } catch (ValidationException e) {
             e.printStackTrace();
         }
     }
 
-    public void setCompany(Company company) {
-        this.company = company;
-        binder.readBean(company);
+    public void setElement(Element element) {
+        this.element = element;
+        binder.readBean(element);
     }
 
-    public static abstract class CompanyFormEvent extends ComponentEvent<CompanyForm> {
-        private Company company;
+    public static abstract class ElementFormEvent extends ComponentEvent<ElementForm> {
+        private Element element;
 
-        protected CompanyFormEvent(CompanyForm source, Company company) {
+        protected ElementFormEvent(ElementForm source, Element element) {
             super(source, false);
-            this.company = company;
+            this.element = element;
         }
 
-        public Company getCompany() {
-            return company;
-        }
-    }
-
-    public static class SaveEvent extends CompanyFormEvent {
-        SaveEvent(CompanyForm source, Company company) {
-            super(source, company);
+        public Element getElement() {
+            return element;
         }
     }
 
-    public static class DeleteEvent extends CompanyFormEvent {
-        DeleteEvent(CompanyForm source, Company company) {
-            super(source, company);
+    public static class SaveEvent extends ElementForm.ElementFormEvent {
+        SaveEvent(ElementForm source, Element element) {
+            super(source, element);
+        }
+    }
+
+    public static class DeleteEvent extends ElementForm.ElementFormEvent {
+        DeleteEvent(ElementForm source, Element element) {
+            super(source, element);
         }
 
     }
 
-    public static class CloseEvent extends CompanyFormEvent {
-        CloseEvent(CompanyForm source) {
+    public static class CloseEvent extends ElementForm.ElementFormEvent {
+        CloseEvent(ElementForm source) {
             super(source, null);
         }
     }
@@ -102,4 +114,3 @@ public class CompanyForm extends FormLayout {
         return getEventBus().addListener(eventType, listener);
     }
 }
-
