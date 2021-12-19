@@ -24,7 +24,7 @@ public class ElementForm extends FormLayout {
     private Element element;
     TextField name = new TextField("Наименование");
     ComboBox<Company> company = new ComboBox<>("Производитель");
-    ComboBox<Type> type = new ComboBox<>("Тип комплектующего");
+    ComboBox<Type> type = new ComboBox<>("Вид оборудования");
 
     Button save = new Button("Сохранить");
     Button delete = new Button("Удалить");

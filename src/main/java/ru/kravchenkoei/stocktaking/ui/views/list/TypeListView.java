@@ -14,7 +14,7 @@ import ru.kravchenkoei.stocktaking.data.service.TypeService;
 import ru.kravchenkoei.stocktaking.ui.views.MainLayout;
 import ru.kravchenkoei.stocktaking.ui.views.components.forms.TypeForm;
 
-@PageTitle("Вид продукции")
+@PageTitle("Вид оборудования")
 @Route(value = "/type", layout = MainLayout.class)
 public class TypeListView extends VerticalLayout {
     Grid<Type> typesGrid = new Grid<>();

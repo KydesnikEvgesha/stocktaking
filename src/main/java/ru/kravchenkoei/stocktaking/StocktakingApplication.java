@@ -9,7 +9,7 @@ import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
 import org.vaadin.artur.helpers.LaunchUtil;
 
 @SpringBootApplication
-@PWA(name = "Учет комплектующих", shortName = "Учет комплетующих")
+@PWA(name = "Учет оборудования", shortName = "Учет оборудования")
 @NpmPackage(value = "lumo-css-framework", version = "^4.0.10")
 @NpmPackage(value = "line-awesome", version = "1.3.0")
 public class StocktakingApplication extends SpringBootServletInitializer implements AppShellConfigurator {

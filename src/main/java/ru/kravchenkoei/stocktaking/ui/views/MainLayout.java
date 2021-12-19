@@ -23,7 +23,7 @@ public class MainLayout extends AppLayout {
     }
 
     private void createHeader() {
-        H2 logo = new H2("Учет оргтехники");
+        H2 logo = new H2("Список оборудования");
 
         HorizontalLayout header = new HorizontalLayout(
                 new DrawerToggle(),
@@ -40,8 +40,8 @@ public class MainLayout extends AppLayout {
 
     private void createDrawer() {
         RouterLink companyListLink = new RouterLink("Производители", CompanyListView.class);
-        RouterLink elementListLink = new RouterLink("Комплектующие", ElementListView.class);
-        RouterLink typeListLink = new RouterLink("Типы комплектующих", TypeListView.class);
+        RouterLink elementListLink = new RouterLink("Оборудование", ElementListView.class);
+        RouterLink typeListLink = new RouterLink("Вид оборудования", TypeListView.class);
         companyListLink.setHighlightCondition(HighlightConditions.sameLocation());
 
         addToDrawer(new VerticalLayout(

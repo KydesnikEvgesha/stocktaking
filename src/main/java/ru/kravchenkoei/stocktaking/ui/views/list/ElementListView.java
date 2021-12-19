@@ -9,16 +9,14 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
-import ru.kravchenkoei.stocktaking.data.model.Company;
 import ru.kravchenkoei.stocktaking.data.model.Element;
-import ru.kravchenkoei.stocktaking.data.model.Type;
 import ru.kravchenkoei.stocktaking.data.service.CompanyService;
 import ru.kravchenkoei.stocktaking.data.service.ElementService;
 import ru.kravchenkoei.stocktaking.data.service.TypeService;
 import ru.kravchenkoei.stocktaking.ui.views.MainLayout;
 import ru.kravchenkoei.stocktaking.ui.views.components.forms.ElementForm;
 
-@PageTitle("Продукция")
+@PageTitle("Оборудование")
 @Route(value = "/element", layout = MainLayout.class)
 public class ElementListView extends VerticalLayout {
     Grid<Element> elementGrid = new Grid<>();
