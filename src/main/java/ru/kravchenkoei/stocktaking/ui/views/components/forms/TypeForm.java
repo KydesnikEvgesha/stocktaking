@@ -27,7 +27,6 @@ public class TypeForm extends FormLayout {
 
     public TypeForm() {
         addClassName("contact-form");
-
         binder.bindInstanceFields(this);
         add(name,
                 createButtonsLayout());

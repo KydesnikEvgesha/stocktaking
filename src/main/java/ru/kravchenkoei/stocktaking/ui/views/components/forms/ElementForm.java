@@ -21,96 +21,92 @@ import ru.kravchenkoei.stocktaking.data.model.Type;
 import java.util.List;
 
 public class ElementForm extends FormLayout {
+  private Element element;
+  TextField name = new TextField("Наименование");
+  ComboBox<Company> company = new ComboBox<>("Производитель");
+  ComboBox<Type> type = new ComboBox<>("Вид оборудования");
+
+  Button save = new Button("Сохранить");
+  Button delete = new Button("Удалить");
+  Button close = new Button("Отменить");
+
+  Binder<Element> binder = new BeanValidationBinder<>(Element.class);
+
+  public ElementForm(List<Company> companies, List<Type> types) {
+    addClassName("contact-form");
+    company.setItemLabelGenerator(Company::getName);
+    company.setItems(companies);
+
+    type.setItemLabelGenerator(Type::getName);
+    type.setItems(types);
+
+    binder.bindInstanceFields(this);
+    add(name, company, type, createButtonsLayout());
+  }
+
+  private Component createButtonsLayout() {
+    save.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+    delete.addThemeVariants(ButtonVariant.LUMO_ERROR);
+    close.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
+
+    save.addClickShortcut(Key.ENTER);
+    close.addClickShortcut(Key.ESCAPE);
+
+    save.addClickListener(event -> validateAndSave());
+    delete.addClickListener(event -> fireEvent(new ElementForm.DeleteEvent(this, element)));
+    close.addClickListener(event -> fireEvent(new ElementForm.CloseEvent(this)));
+
+    binder.addStatusChangeListener(e -> save.setEnabled(binder.isValid()));
+    return new HorizontalLayout(save, delete, close);
+  }
+
+  private void validateAndSave() {
+    try {
+      binder.writeBean(element);
+      fireEvent(new ElementForm.SaveEvent(this, element));
+    } catch (ValidationException e) {
+      e.printStackTrace();
+    }
+  }
+
+  public void setElement(Element element) {
+    this.element = element;
+    binder.readBean(element);
+  }
+
+  public abstract static class ElementFormEvent extends ComponentEvent<ElementForm> {
     private Element element;
-    TextField name = new TextField("Наименование");
-    ComboBox<Company> company = new ComboBox<>("Производитель");
-    ComboBox<Type> type = new ComboBox<>("Вид оборудования");
 
-    Button save = new Button("Сохранить");
-    Button delete = new Button("Удалить");
-    Button close = new Button("Отменить");
-
-    Binder<Element> binder = new BeanValidationBinder<>(Element.class);
-
-    public ElementForm(List<Company> companies, List<Type> types) {
-        addClassName("contact-form");
-        company.setItemLabelGenerator(Company::getName);
-        company.setItems(companies);
-
-        type.setItemLabelGenerator(Type::getName);
-        type.setItems(types);
-
-        binder.bindInstanceFields(this);
-        add(name,
-                company,
-                type,
-                createButtonsLayout());
+    protected ElementFormEvent(ElementForm source, Element element) {
+      super(source, false);
+      this.element = element;
     }
 
-    private Component createButtonsLayout() {
-        save.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
-        delete.addThemeVariants(ButtonVariant.LUMO_ERROR);
-        close.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
-
-        save.addClickShortcut(Key.ENTER);
-        close.addClickShortcut(Key.ESCAPE);
-
-        save.addClickListener(event -> validateAndSave());
-        delete.addClickListener(event -> fireEvent(new ElementForm.DeleteEvent(this, element)));
-        close.addClickListener(event -> fireEvent(new ElementForm.CloseEvent(this)));
-
-        binder.addStatusChangeListener(e -> save.setEnabled(binder.isValid()));
-        return new HorizontalLayout(save, delete, close);
+    public Element getElement() {
+      return element;
     }
+  }
 
-    private void validateAndSave() {
-        try {
-            binder.writeBean(element);
-            fireEvent(new ElementForm.SaveEvent(this, element));
-        } catch (ValidationException e) {
-            e.printStackTrace();
-        }
+  public static class SaveEvent extends ElementForm.ElementFormEvent {
+    SaveEvent(ElementForm source, Element element) {
+      super(source, element);
     }
+  }
 
-    public void setElement(Element element) {
-        this.element = element;
-        binder.readBean(element);
+  public static class DeleteEvent extends ElementForm.ElementFormEvent {
+    DeleteEvent(ElementForm source, Element element) {
+      super(source, element);
     }
+  }
 
-    public static abstract class ElementFormEvent extends ComponentEvent<ElementForm> {
-        private Element element;
-
-        protected ElementFormEvent(ElementForm source, Element element) {
-            super(source, false);
-            this.element = element;
-        }
-
-        public Element getElement() {
-            return element;
-        }
+  public static class CloseEvent extends ElementForm.ElementFormEvent {
+    CloseEvent(ElementForm source) {
+      super(source, null);
     }
+  }
 
-    public static class SaveEvent extends ElementForm.ElementFormEvent {
-        SaveEvent(ElementForm source, Element element) {
-            super(source, element);
-        }
-    }
-
-    public static class DeleteEvent extends ElementForm.ElementFormEvent {
-        DeleteEvent(ElementForm source, Element element) {
-            super(source, element);
-        }
-
-    }
-
-    public static class CloseEvent extends ElementForm.ElementFormEvent {
-        CloseEvent(ElementForm source) {
-            super(source, null);
-        }
-    }
-
-    public <T extends ComponentEvent<?>> Registration addListener(Class<T> eventType,
-                                                                  ComponentEventListener<T> listener) {
-        return getEventBus().addListener(eventType, listener);
-    }
+  public <T extends ComponentEvent<?>> Registration addListener(
+      Class<T> eventType, ComponentEventListener<T> listener) {
+    return getEventBus().addListener(eventType, listener);
+  }
 }
