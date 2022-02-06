@@ -20,6 +20,6 @@ public class Workstation implements Serializable {
 
   @OneToOne @MapsId private Location location;
 
-//  @OneToMany(mappedBy = "workstation")
-//  private List<Element> elementList;
+  @OneToMany(mappedBy = "workstation")
+  private List<Element> elementList;
 }

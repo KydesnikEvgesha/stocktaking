@@ -2,7 +2,6 @@ package ru.kravchenkoei.stocktaking.data;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.NonNull;
 import lombok.Setter;
 
 import javax.persistence.*;
@@ -14,6 +13,7 @@ import javax.persistence.*;
 public abstract class AbstractModel {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @NonNull
+    @Column(name = "id", nullable = false, updatable = false)
     private Long id;
+
 }

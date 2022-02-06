@@ -1,19 +1,19 @@
 package ru.kravchenkoei.stocktaking.data.model;
 
 import lombok.Data;
+import ru.kravchenkoei.stocktaking.data.AbstractModel;
 
-import javax.persistence.*;
-import java.io.Serializable;
+import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 @Data
 @Entity
-public class Specification implements Serializable {
-  @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
-  @Column(nullable = false, updatable = false)
-  private Long id;
+public class Specification extends AbstractModel {
 
   private String name;
 
-  @ManyToOne @PrimaryKeyJoinColumn private Element element;
+  @ManyToOne
+  @JoinColumn(name = "type_id")
+  private Type type;
 }
