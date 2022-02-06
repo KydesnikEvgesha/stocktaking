@@ -6,6 +6,7 @@ import ru.kravchenkoei.stocktaking.data.model.Employee;
 import ru.kravchenkoei.stocktaking.data.repo.EmployeeRepo;
 import ru.kravchenkoei.stocktaking.exception.EntityNotFoundException;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,7 +16,7 @@ public class EmployeeService {
 
   private final EmployeeRepo employeeRepo;
 
-  public Employee addEmployee(Employee employeeDto) {
+  public Employee saveEmployee(Employee employeeDto) {
     return Optional.of(employeeDto)
             .map(employeeRepo::save)
             .get();
@@ -26,7 +27,7 @@ public class EmployeeService {
   }
 
   public Employee updateEmployee(Employee employee) {
-    return addEmployee(employee);
+    return saveEmployee(employee);
   }
 
   public Employee findEmployeeById(Long id) {
@@ -39,5 +40,13 @@ public class EmployeeService {
 
   public void deleteEmployee(Long id) {
     employeeRepo.deleteById(id);
+  }
+
+  public List<Employee> searchEmployees(String filter){
+    if (filter == null || filter.isEmpty()){
+      return (ArrayList<Employee>) employeeRepo.findAll();
+    }else{
+      return employeeRepo.findByFieldIgnoreCaseAndOrderByFirstNameAndLastNameASC(filter);
+    }
   }
 }

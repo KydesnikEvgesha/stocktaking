@@ -13,32 +13,29 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class CompanyService {
 
-    private final CompanyRepo companyRepo;
+  private final CompanyRepo companyRepo;
 
-    public List<Company> findAllCompanies(){
-        return (List<Company>) companyRepo.findAll();
+  public List<Company> findAllCompanies() {
+    return (List<Company>) companyRepo.findAll();
+  }
+
+  public Company saveCompany(Company company) {
+    return Optional.of(company).map(companyRepo::save).get();
+  }
+
+  public Company updateCompany(Company company) {
+    return saveCompany(company);
+  }
+
+  public void deleteCompany(Long id) {
+    companyRepo.deleteById(id);
+  }
+
+  public List<Company> searchCompanies(String filter) {
+    if (filter == null || filter.isEmpty()) {
+      return (ArrayList<Company>) companyRepo.findAll();
+    } else {
+      return companyRepo.findByNameLikeIgnoreCaseOrAddressLikeIgnoreCase(filter);
     }
-
-    public Company saveCompany(Company company) {
-        return Optional.of(company)
-                .map(companyRepo::save)
-                .get();
-    }
-
-    public Company updateCompany(Company company) {
-        return saveCompany(company);
-    }
-
-    public void deleteCompany(Long id) {
-        companyRepo.deleteById(id);
-    }
-
-    public List<Company> searchCompanies(String filter){
-        if (filter == null || filter.isEmpty()){
-            return (ArrayList<Company>) companyRepo.findAll();
-        }else{
-            return companyRepo.findByNameLikeIgnoreCaseOrAddressLikeIgnoreCase(filter);
-        }
-    }
-
+  }
 }

@@ -2,14 +2,14 @@ package ru.kravchenkoei.stocktaking.data.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.kravchenkoei.stocktaking.exception.EntityNotFoundException;
 import ru.kravchenkoei.stocktaking.data.model.Location;
 import ru.kravchenkoei.stocktaking.data.repo.LocationRepo;
+import ru.kravchenkoei.stocktaking.exception.EntityNotFoundException;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -17,10 +17,8 @@ public class LocationService {
 
   private final LocationRepo locationRepo;
 
-  public Location addLocation(Location location) {
-    return Optional.of(location)
-        .map(locationRepo::save)
-        .get();
+  public Location saveLocation(Location location) {
+    return Optional.of(location).map(locationRepo::save).get();
   }
 
   public List<Location> findAllLocations() {
@@ -28,7 +26,7 @@ public class LocationService {
   }
 
   public Location updateLocation(Location locationDto) {
-    return addLocation(locationDto);
+    return saveLocation(locationDto);
   }
 
   public Location findLocationById(Long id) {
@@ -40,5 +38,15 @@ public class LocationService {
 
   public void deleteLocation(Long id) {
     locationRepo.deleteById(id);
+  }
+
+  public Collection<Location> searchLocations(String filter) {
+    if (filter == null || filter.isEmpty()) {
+      return (ArrayList<Location>) locationRepo.findAll();
+    } else {
+      return locationRepo
+          .findByNameOfficeLikeIgnoreCaseOrAddressLikeIgnoreCaseAllIgnoreCaseOrderByNameOfficeAsc(
+              filter);
+    }
   }
 }
